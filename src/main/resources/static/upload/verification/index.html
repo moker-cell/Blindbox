@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base href="${pageContext.request.getContextPath()}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOHER SPRINGBOOT 开发框架 - 主页</title>
+    <meta name="keywords" content="TOHER后台主题,后台TOHER J2EE框架">
+    <meta name="description" content="TOHER J2EE 开发框架是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的SSM + shiro + redis等技术">
+    <link rel="shortcut icon" href="favicon.ico"> <link href="css/bootstrap.min.css?v=3.3.6" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link href="css/font-awesome.css?v=4.4.0" th:href="@{/css/font-awesome.css}" rel="stylesheet">
+    <link href="css/animate.css" th:href="@{/css/animate.css}" rel="stylesheet">
+    <link href="css/style.css?v=4.1.0" th:href="@{/css/style.css}" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    <script>if (window.top !== window.self) {
+        window.top.location = window.location;
+    }</script>
+</head>
+<body class="gray-bg">
+<div style="text-align: center"><h1 class="logo-name">TOHER</h1></div>
+<div class="middle-box text-center loginscreen  animated fadeInDown">
+    <div>
+        <h3>欢迎使用 TOHER J2EE 开发框架</h3>
+        <p class="text-muted text-center" id="error-box" style="color: #f00; height: 30px;">注册一个新账号</p>
+        <form class="m-t" role="form">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="用户名/手机号" value="13724889158" name="username" required>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" placeholder="密码" value="123456" name="password" required>
+            </div>
+            <div class="form-group input-group">
+                <input type="text" class="form-control" placeholder="验证码" name="code" required>
+                <span class="input-group-btn"> <img src="common/kaptcha" height="32" onclick="this.src='common/kaptcha?m='+Math.random();" /></span>
+            </div>
+            <button type="button" class="btn btn-primary block full-width m-b" onclick="submitLogin();">登 录</button>
+            <p class="text-muted text-center"> <a><small>忘记密码了？</small></a> | <a>注册账号</a></p>
+        </form>
+
+    </div>
+</div>
+
+<!-- 全局js -->
+<script src="js/jquery.min.js?v=2.1.4" th:src="@{/js/jquery.min.js}"></script>
+<script src="js/bootstrap.min.js?v=3.3.6" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript">
+    function submitLogin() {
+        var username = $("input[name='username']").val();
+        var password = $("input[name='password']").val();
+        var code = $("input[name='code']").val();
+        var errorbox = $("#error-box");
+        if (username == "") {
+            errorbox.html("登陆帐号不能为空");
+        } else if (password == "") {
+            errorbox.html("登陆密码不能为空");
+        } else if (code == "") {
+            errorbox.html("验证码不能为空");
+        } else {
+            $.ajax({
+                url: "/sys_user/userlogin.json",
+                dataType: "json",
+                data: $(".m-t").serialize(),
+                success: function (data) {
+                    if (data.code == "success") {
+                        window.location.href = "hsh/index.do";
+                    } else {
+                        errorbox.html(data.message);
+                    }
+                }
+
+            });
+        }
+    }
+</script>
+</body>
+</html>

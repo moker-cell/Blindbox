@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.toher.project.system.user.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="User" >
+        <id column="user_id" property="userId" jdbcType="NVARCHAR" />
+        <result column="username" property="username" jdbcType="NVARCHAR" />
+        <result column="password" property="password" jdbcType="NVARCHAR" />
+        <result column="real_name" property="realName" jdbcType="NVARCHAR" />
+        <result column="last_login" property="lastLogin" jdbcType="NVARCHAR" />
+        <result column="ip" property="ip" jdbcType="NVARCHAR" />
+        <result column="email" property="email" jdbcType="NVARCHAR" />
+        <result column="phone" property="phone" jdbcType="NVARCHAR" />
+        <result column="status" property="status" jdbcType="BIT" />
+        <result column="remarks" property="remarks" jdbcType="NVARCHAR" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="is_developer" property="isDeveloper" jdbcType="BIT" />
+    </resultMap>
+
+    <!-- 一对多查询关联查询用户下的所有角色  -->
+    <resultMap id="UserResultMap" type="User" extends="BaseResultMap">
+        <collection property="roles" javaType="ArrayList" ofType="Role"
+                    column="user_id" select="com.toher.project.system.role.mapper.RoleMapper.selectRolesByUser">
+        </collection>
+    </resultMap>
+
+    <select id="getObjectsInXML" resultMap="UserResultMap" parameterType="java.util.Map" >
+        select
+        u.*
+        from th_sys_user as u
+        <where>
+            <if test="startTime !=null and startTime !=''">
+                and u.create_date &gt;= #{startTime}
+            </if>
+            <!-- 结束时间必须是当天23:59:59时间 -->
+            <if test="endTime !=null and endTime !=''">
+                and u.create_date &lt;= #{endTime}+' 23:59:59'
+            </if>
+            <if test="username !=null and username !=''">
+                and u.username like '%'+#{username,jdbcType=NVARCHAR}+'%'
+            </if>
+            <if test="realName !=null and realName!=''">
+                and u.real_name like '%'+#{realName,jdbcType=NVARCHAR}+'%'
+            </if>
+            <if test="phone !=null and phone!=''">
+                and u.phone like '%'+#{phone,jdbcType=NVARCHAR}+'%'
+            </if>
+            <if test="status !=null and status !=''">
+                and u.status = #{status,jdbcType=BIT}
+            </if>
+            <if test="roleId != null and roleId != ''">
+                and u.user_id in (select user_id from th_sys_user_role where role_id = #{roleId})
+            </if>
+        </where>
+        order by u.create_date desc
+    </select>
+
+    <select id="selectUserAndRolesInXML" resultMap="UserResultMap" parameterType="java.lang.String" >
+        select
+        u.*,
+        role.role_name,
+        role.role_id
+        from th_sys_user as u
+        left join th_sys_user_role as user_role on (u.user_id = user_role.user_id)
+        left join th_sys_role as role on (user_role.role_id = role.role_id)
+        where u.user_id = #{userId,jdbcType=NVARCHAR}
+    </select>
+
+</mapper>

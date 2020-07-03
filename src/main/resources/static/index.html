@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>德发餐管后台</title>
+    <meta name="keywords" content="德发餐管后台">
+    <meta name="description" content="德发餐管后台">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="css/bootstrap.min.css?v=3.3.6" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link href="css/font-awesome.css?v=4.4.0" th:href="@{/css/font-awesome.css}" rel="stylesheet">
+    <link href="css/animate.css" th:href="@{/css/animate.css}" rel="stylesheet">
+    <link href="css/style.css?v=4.1.0" th:href="@{/css/style.css}" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html"/>
+    <![endif]-->
+    <script>
+        if (window.top !== window.self) {
+            window.top.location = window.location;
+        }
+    </script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var ctx = /*[[@{/}]]*/ '';
+        /*]]>*/
+    </script>
+
+</head>
+<body class="gray-bg">
+<div style="text-align: center"><h1 class="logo-name">德发餐管后台</h1></div>
+<div class="middle-box text-center loginscreen  animated fadeInDown">
+    <div>
+        <form class="m-t" role="form">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="邮箱/手机号" name="username" required>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" placeholder="密码" name="password" required>
+            </div>
+            <div class="form-group input-group">
+                <input type="text" class="form-control" placeholder="验证码" name="code" required>
+                <span class="input-group-btn"> <img height="32" id="kaptcha"
+                                                    onclick="this.src='kaptcha.view?m='+Math.random();"/></span>
+            </div>
+            <button type="button" class="btn btn-primary block full-width m-b" onclick="submitLogin();">登 录</button>
+        </form>
+    </div>
+</div>
+
+<!-- 全局js -->
+<script src="js/jquery.min.js?v=2.1.4" th:src="@{/js/jquery.min.js}"></script>
+<script src="js/bootstrap.min.js?v=3.3.6" th:src="@{/js/bootstrap.min.js}"></script>
+<script src="js/plugins/layer/layer.min.js" th:src="@{/js/plugins/layer/layer.min.js}"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#kaptcha").click();
+
+        //捕获Enter回车事件
+        $(document).keydown(function(event){
+            if(event.keyCode==13){
+                submitLogin();
+            }
+        });
+    });
+
+    function submitLogin() {
+        var username = $("input[name='username']").val();
+        var password = $("input[name='password']").val();
+        var code = $("input[name='code']").val();
+        if (username == "") {
+            layer.msg("登陆帐号不能为空");
+        } else if (password == "") {
+            layer.msg("登陆密码不能为空");
+        } else if (code == "") {
+            layer.msg("验证码不能为空");
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: ctx + 'login.json',
+                dataType: 'json',
+                data: $(".m-t").serialize(),
+                success: function (data) {
+                    if (data.code == "success") {
+                        window.location.href = ctx + "main/index";
+                    } else {
+                        layer.msg(data.message);
+                    }
+                }
+            });
+        }
+    }
+</script>
+
+</body>
+</html>

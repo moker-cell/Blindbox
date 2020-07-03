@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:include="system/include :: header"></head>
+
+<SCRIPT type="text/javascript" th:inline="javascript">
+    var setting = {
+        view: {
+            selectedMulti: false
+        },
+        check: {
+            enable: true,
+            half: true,
+            chkboxType: {"Y": "s", "N": "ps"},
+            nocheckInherit: true
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        }
+    };
+    /*<![CDATA[*/
+    var zNodes = [[${json}]];
+    /*]]>*/
+    /*<![CDATA[*/
+    var roleId = [[${roleId}]];
+    /*]]>*/
+    if(zNodes!=""){
+        zNodes = $.parseJSON(zNodes);
+    }
+
+    var ztree;
+
+    $(document).ready(function () {
+        ztree = $.fn.zTree.init($("#tree"), setting, zNodes);
+        ztree.expandAll(true);
+    });
+
+    function saveAuthority() {
+        if (ztree != null) {
+            var Authority_ids = [];
+            var nodes = ztree.getCheckedNodes(true);
+            for (var i = 0; i < nodes.length; i++) {
+                // 判断半选状态 且不是父节点 则过滤,不保存
+                if (nodes[i].getCheckStatus().half === false && nodes[i].isParent==false) {
+                    Authority_ids.push(nodes[i].id);
+                }
+            }
+            console.log(Authority_ids);
+            //判断是数组否有值，存在值则进行提交
+            if (Authority_ids.length > 0) {
+                $.ajax({
+                    url: ctx + "system/role/saveAuthority/"+roleId,
+                    data:{AuthorityIds: Authority_ids},
+                    type: "POST",
+                    traditional: true,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code == "success") {
+                            layer.msg(data.message, {icon: 1, time: 2000});
+                            setTimeout(function () {
+                                top.layer.closeAll();
+                            }, 2000);
+                        }else{
+                            layer.msg(data.message, {icon: 5, time: 4000});
+                        }
+                    }
+                });
+            }else{
+                layer.alert("未选择权限");
+            }
+        }
+    }
+</SCRIPT>
+
+<body class="gray-bg">
+<div id="tree" class="ztree" style="padding:15px 20px;"></div>
+<div style="height: 40px;"></div>
+<a class="btn btn-block btn-primary compose-mail" onclick="saveAuthority();" style="position:fixed;bottom:0px;border-radius: 0px;">保存权限</a>
+</body>
+
+</html>

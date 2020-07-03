@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+    <head th:include="system/include :: header"></head>
+    <style>
+        .marginleft{ margin-left: 15px;}
+    </style>
+    <body>
+        <form id="inputForm" class="form-horizontal" th:action="@{/system/menu/save}" method="post">
+            <input id="menuId" name="menuId" type="hidden" th:value="${menu?.menuId}"/>
+            <table class="table table-bordered  table-condensed dataTables-example dataTable no-footer">
+                <tbody>
+                    <tr>
+                        <td class="width10 active">
+                            <label class="pull-right">菜单:</label>
+                        </td>
+                        <td>
+                            <input id="parentId" name="parentId" class="form-control required" type="hidden" th:value="${pmenu?.menuId}"/>
+                            <div class="input-group">
+                                <input id="parent_menu_name" name="parent_menu_name" readonly="readonly" type="text"
+                                       th:value="${pmenu==null ? '功能菜单' : pmenu.menuName}" data-msg-required=""  class="form-control required"/>
+                                <span class="input-group-btn">
+                                    <button type="button" id="menuButton" class="btn btn-primary">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                            <label id="menuName-error" class="error" style="display:none"></label>
+                            <script type="text/javascript">
+                                $("#menuButton, #menuName").click(function () {
+                                    // 是否限制选择，如果限制，设置为disabled
+                                    if ($("#menuButton").hasClass("disabled")) {
+                                        return true;
+                                    }
+                                    // 正常打开
+                                    top.layer.open({
+                                        type: 2,
+                                        area: ['300px','500px'],
+                                        title: "选择菜单",
+                                        ajaxData: {selectIds: $("#menuId").val()},
+                                        content: ctx + "system/menu/menuTree",
+                                        btn: ['确定', '关闭'],
+                                        yes: function (index, layero) {
+                                            var tree = layero.find("iframe")[0].contentWindow.ztree;
+                                            console.log(tree);
+                                            var ids = [], names = [], nodes = [];
+                                            nodes = tree.getSelectedNodes();
+                                            for (var i = 0; i < nodes.length; i++) {
+                                                ids.push(nodes[i].id);
+                                                names.push(nodes[i].name);
+                                                // 如果为非复选框选择，则返回第一个选择
+                                                console.log(nodes[i].name);
+                                                //break;
+                                            }
+                                            $("#parentId").val(ids.join(",").replace(/u_/ig, ""));
+                                            $("#parent_menu_name").val(names.join(","));
+                                            $("#parent_menu_name").focus();
+                                            top.layer.close(index);
+                                        }
+                                    });
+
+                                });
+                            </script>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="width10 active">
+                            <label class="pull-right"><font color="red">*</font>功能:</label>
+                        </td>
+                        <td>
+                            <span class="marginleft">
+                                <input name="menuType" class="required i-checks menu_type" type="radio"  th:checked="${menu?.menuType eq 1} or ${menu==null}" value="1"/>
+                            </span>
+                            <label>目录</label>
+                            <span class="marginleft">
+                                <input name="menuType" class="required i-checks menu_type" type="radio" value="2" th:checked="${menu?.menuType eq 2 }"/>
+                            </span>
+                            <label>菜单</label>
+                            <span class="marginleft">
+                                <input name="menuType" class="required i-checks menu_type" type="radio" value="3" th:checked="${menu?.menuType eq 3 }"/>
+                            </span>
+                            <label>功能</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="width10 active">
+                            <label class="pull-right"><font color="red">*</font>名称:</label>
+                        </td>
+                        <td>
+                            <input id="menuName" name="menuName" class="required form-control " type="text" th:value="${menu?.menuName}" maxlength="50"/>
+                        </td>
+                    </tr>
+                    <tr id="menu_url">
+                        <td class="width10 active">
+                            <label class="pull-right"><font color="red">*</font>链接:</label>
+                        </td>
+                        <td>
+                            <input id="menuUrl" name="menuUrl" class="form-control " type="text" th:value="${menu?.menuUrl}" maxlength="200"/>
+                            <span class="help-inline">点击菜单跳转的页面</span>
+                        </td>
+                    </tr>
+                    <tr id="menu_icon">
+                        <td class="width10 active">
+                            <label class="pull-right">图标:</label>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input  id="menuIcon" name="menuIcon" readonly="readonly" type="text" th:value="${menu?.menuIcon}" class="form-control required"/>
+                                <span class="input-group-btn">
+                                    <i id="iconIcon" th:class="${menu?.menuIcon==null ? 'icon- hide' : menu.menuIcon}"></i>
+                                    <a id="iconButton" href="javascript:" class="btn btn-primary " style="margin-right: 10px;">选择</a>
+                                    <input id="iconclear" class="btn btn-default " type="button" value="清除" onclick="clear()"/>
+                                </span>
+                            </div>
+                            <script type="text/javascript">
+                                $("#iconButton").click(function () {
+                                    top.layer.open({
+                                        type: 2,
+                                        title: "选择图标",
+                                        area: ['800px', $(top.document).height() - 180 + "px"],
+                                        content: ctx + 'common/icon',
+                                        btn: ['选择', '关闭'],
+                                        yes: function (index, layero) {
+                                            var icon = layero.find("iframe")[0].contentWindow.$("#icon").val();
+                                            $("#iconIcon").attr("class", icon);
+                                            $("#menuIcon").val(icon);
+                                            top.layer.close(index);
+                                        }
+                                    });
+                                });
+                                $("#iconclear").click(function () {
+                                    $("#iconIcon").attr("class", "icon- hide");
+                                    $("#icon").val("");
+                                });
+                            </script>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="width10 active">
+                            <label class="pull-right">状态:</label>
+                        </td>
+                        <td>
+                            <span class="marginleft">
+                                <input name="menuStatus" th:checked="${menu?.menuStatus == true} or ${menu==null}" class="required i-checks " type="radio" value="1"/>
+                                <label>启用</label>
+                            </span>
+                            <span class="marginleft">
+                                <input name="menuStatus" th:checked="${menu?.menuStatus == false }"  class="required i-checks " type="radio" value="0" />
+                                <label>禁用</label>
+                            </span>
+                            <span class="help-inline">该菜单操作是否显示到系统菜单中</span>
+                        </td>
+                    </tr>
+                    <tr id="permissionc_code">
+                        <td class="width10 active">
+                            <label class="pull-right"><font color="red">*</font>权限:</label>
+                        </td>
+                        <td>
+                            <input id="permissionCode" name="permissionCode" class="form-control " type="text" th:value="${menu?.permissionCode}" maxlength="100"/>
+                            <span class="help-inline">控制器中定义的权限标识，如：@RequiresPermissions("权限标识")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="width10 active">
+                            <label class="pull-right">排序:</label>
+                        </td>
+                        <td>
+                            <input id="menuSort" name="menuSort" class="required digits form-control " type="text" th:value="${menu?.menuSort}" maxlength="50"/>
+                            <span class="help-inline">排列顺序，升序</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="width10 active">
+                            <label class="pull-right">备注:</label>
+                        </td>
+                        <td>
+                            <textarea id="menuRemarks" name="menuRemarks" maxlength="200" class="form-control " rows="3">[[${menu?.menuRemarks}]]</textarea>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="text-align: center">
+                <button class="btn btn-primary" type="submit">保存内容</button>
+                <button class="btn btn-white" type="reset">重置</button>
+            </div>
+        </form>
+
+        <script type="text/javascript">
+
+            var menu_type = $('input[name="menuType"]:checked').val();
+            console.log(menu_type);
+            $(function(){
+                if(menu_type==""){
+                    showMenuType(1);
+                }else{
+                    showMenuType(menu_type);
+                }
+                $(".menu_type").on('ifChecked', function(event){
+                    var value =$(this).val();
+                    showMenuType(value)
+                });
+            });
+
+            //定义功能类型所需显示的字段
+            function showMenuType(value){
+                $("#menu_url").hide();
+                $("#permissionc_code").hide();
+                $("#menu_icon").hide();
+                if(value==1){
+                    //隐藏url 权限标识
+                    $("#menu_icon").show();
+                }else if(value==2){
+                    $("#menu_url").show();
+                    $("#permissionc_code").show();
+                }else if(value==3){
+                    $("#permissionc_code").show();
+                }
+            }
+
+            $("#inputForm").validate({
+                rules: {
+                    menuName: "required"
+                },
+                submitHandler: function (form) {
+                    $(form).ajaxSubmit({
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.code == "success") {
+                                layer.msg(data.message, {icon: 1, time: 2000});
+                                setTimeout(function () {
+                                    var index = top.layer.getFrameIndex(window.name);
+                                     // refreshActiveIframe();
+                                    top.layer.close(index);
+                                }, 2000);
+                                //刷新当前活动页面
+
+                            } else {
+                                layer.msg(data.message, {icon: 5, time: 4000});
+                            }
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+</html>

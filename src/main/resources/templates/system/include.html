@@ -1,0 +1,64 @@
+<head th:fragment="header">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+	<meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+	<link rel="shortcut icon" th:href="@{/favicon.ico}">
+	<link href="../../static/css/bootstrap.min.css?v=3.3.6" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+	<link href="../../static/css/font-awesome.css?v=4.4.0" th:href="@{/css/font-awesome.css}" rel="stylesheet">
+	<link href="../../static/css/animate.css" th:href="@{/css/animate.css}" rel="stylesheet">
+	<!-- chosen -->
+	<link href="../../static/css/plugins/chosen/chosen.css" th:href="@{/css/plugins/chosen/chosen.css}" rel="stylesheet">
+	<link href="../../static/css/style.css?v=4.1.0" th:href="@{/css/style.css}" rel="stylesheet">
+	<!-- 全局js -->
+	<script src="../../static/js/jquery.min.js?v=2.1.4" th:src="@{/js/jquery.min.js}"></script>
+	<script src="../../static/js/bootstrap.min.js?v=3.3.6" th:src="@{/js/bootstrap.min.js}"></script>
+	<script src="../../static/js/plugins/metisMenu/jquery.metisMenu.js" th:src="@{/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+	<script src="../../static/js/plugins/slimscroll/jquery.slimscroll.min.js" th:src="@{/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+	<!-- 自定义js -->
+	<script src="../../static/js/content.js?v=1.0.0" th:src="@{/js/content.js}"></script>
+	<!-- 第三方插件 -->
+	<script src="../../static/js/plugins/pace/pace.min.js" th:src="@{/js/plugins/pace/pace.min.js}"></script>
+	<!-- 所需样式  和JS -->
+	<!-- Data Tables -->
+	<link href="../../static/css/plugins/dataTables/dataTables.bootstrap.css" th:href="@{/css/plugins/dataTables/dataTables.bootstrap.css}" rel="stylesheet">
+	<link href="../../static/css/plugins/dataTables/editor.dataTables.css" th:href="@{/css/plugins/dataTables/editor.dataTables.css}" rel="stylesheet">
+	<link href="../../static/css/plugins/dataTables/fixedColumns.bootstrap.css" th:href="@{/css/plugins/dataTables/fixedColumns.bootstrap.css}">
+	<script src="../../static/js/plugins/dataTables/toher.dataTables.js" th:src="@{/js/plugins/dataTables/toher.dataTables.js}"></script>
+
+	<script src="../../static/js/plugins/dataTables/dataTables.fixedColumns.js" th:src="@{/js/plugins/dataTables/dataTables.fixedColumns.js}"></script>
+	<!-- layer插件 -->
+	<script src="../../static/js/plugins/layer/layer.min.js" th:src="@{/js/plugins/layer/layer.min.js}"></script>
+	<script src="../../static/js/plugins/layer/laydate/laydate.js" th:src="@{/js/plugins/layer/laydate/laydate.js}"></script>
+	<script src="../../static/js/plugins/layer/layerSilica.js" th:src="@{/js/plugins/layer/layerSilica.js}"></script>
+	<!-- ztree -->
+	<link href="../../static/css/plugins/ztree/metroStyle.css" th:href="@{/css/plugins/ztree/metroStyle.css}" rel="stylesheet" type="text/css"/>
+	<script src="../../static/js/plugins/ztree/jquery.ztree.all.min.js" th:src="@{/js/plugins/ztree/jquery.ztree.all.min.js}" type="text/javascript"></script>
+	<!-- iCheck -->
+	<link href="../../static/css/plugins/iCheck/custom.css" th:href="@{/css/plugins/iCheck/custom.css}" rel="stylesheet">
+	<script src="../../static/js/plugins/iCheck/icheck.min.js" th:src="@{/js/plugins/iCheck/icheck.min.js}"></script>
+	<!-- validate -->
+	<script src="../../static/js/plugins/validate/jquery.validate.js" th:src="@{/js/plugins/validate/jquery.validate.js}"></script>
+	<script src="../../static/js/plugins/validate/validate-methods.js" th:src="@{/js/plugins/validate/validate-methods.js}"></script>
+	<script src="../../static/js/plugins/validate/messages_zh.js" th:src="@{/js/plugins/validate/messages_zh.js}"></script>
+	<script src="../../static/js/plugins/validate/jquery.form.js" th:src="@{/js/plugins/validate/jquery.form.js}"></script>
+	<!-- treeTable -->
+	<link href="../../static/css/plugins/treeTable/treeTable.min.css" th:href="@{/css/plugins/treeTable/treeTable.min.css}" rel="stylesheet">
+	<script src="../../static/js/plugins/treeTable/jquery.treeTable.min.js" th:src="@{/js/plugins/treeTable/jquery.treeTable.min.js}"></script>
+	<!-- toher_commom -->
+	<link href="../../static/css/common/toher_common.css" th:href="@{/css/common/toher_common.css}" rel="stylesheet">
+	<script src="../../static/js/contabs.js" th:src="@{/js/contabs.js}"></script>
+	<script src="../../static/js/common/toher_common.js" th:src="@{/js/common/toher_common.js}"></script>
+	<!-- 选择下拉插件 -->
+	<script src="../../static/js/plugins/chosen/chosen.jquery.js" th:src="@{/js/plugins/chosen/chosen.jquery.js}"></script>
+	<!-- FormJSON转化 -->
+	<script src="../../static/js/plugins/serializejson/jquery.serializejson.js" th:src="@{/js/plugins/serializejson/jquery.serializejson.js}"></script>
+	<!-- 定义js上下文 -->
+	<script th:inline="javascript">
+        /*<![CDATA[*/
+        var ctx = /*[[@{/}]]*/ '';
+        /*]]>*/
+        var timeOut = 2000;
+        var socket;
+	</script>
+</head>

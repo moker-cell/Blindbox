@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.toher.project.system.menu.mapper.MenuMapper">
+
+    <resultMap id="BaseResultMap" type="Menu" >
+        <id column="menu_id" property="menuId" jdbcType="NVARCHAR" />
+        <result column="menu_name" property="menuName" jdbcType="NVARCHAR" />
+        <result column="menu_url" property="menuUrl" jdbcType="NVARCHAR" />
+        <result column="parent_id" property="parentId" jdbcType="NVARCHAR" />
+        <result column="menu_icon" property="menuIcon" jdbcType="NVARCHAR" />
+        <result column="menu_type" property="menuType" jdbcType="INTEGER" />
+        <result column="permission_code" property="permissionCode" jdbcType="NVARCHAR" />
+        <result column="menu_sort" property="menuSort" jdbcType="INTEGER" />
+        <result column="menu_status" property="menuStatus" jdbcType="BIT" />
+        <result column="menu_remarks" property="menuRemarks" jdbcType="NVARCHAR" />
+        <result column="menu_target" property="menuTarget" jdbcType="NVARCHAR" />
+    </resultMap>
+    <!-- 一对多查询关联查询所有下级  -->
+    <resultMap id="MenuResultMap" type="Menu" extends="BaseResultMap">
+        <collection property="menus" column="menu_id" select="getObjectByParentId"></collection>
+    </resultMap>
+
+    <select id="getObjects" resultMap="MenuResultMap" parameterType="java.util.Map" >
+        select * from th_sys_menu where 1=1
+        <if test="parentId !=null and parentId!=''">
+            and parent_id = #{parentId}
+        </if>
+        <!-- TreeTable 递归查询所需 -->
+        <if test="queryParentId =='isNull' ">
+            and parent_id is null
+        </if>
+        <if test="menuStatus !=null ">
+            and menu_status = #{menuStatus,jdbcType=BIT}
+        </if>
+        <if test="menuType !=null ">
+            and menu_type = #{menuType}
+        </if>
+        <!-- 过滤功能菜单 添加菜单选择级别时候不需要显示功能菜单 -->
+        <if test="isNotShowFunction !=null ">
+            and menu_type != #{isNotShowFunction,jdbcType=INTEGER}
+        </if>
+        order by menu_sort asc,id asc
+    </select>
+
+    <!-- 可以作用于无限级子集合查询 -->
+    <select id="getObjectByParentId" resultMap = "MenuResultMap" parameterType="java.lang.String">
+        select * from th_sys_menu
+        where 1=1 and parent_id = #{menuId} order by menu_sort asc,id asc
+    </select>
+
+</mapper>

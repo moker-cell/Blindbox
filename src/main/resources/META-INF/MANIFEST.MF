@@ -1,0 +1,61 @@
+Manifest-Version: 1.0
+Class-Path: netty-resolver-4.1.29.Final.jar logback-core-1.2.3.jar spr
+ ing-beans-5.0.9.RELEASE.jar spring-context-support-5.0.9.RELEASE.jar 
+ snakeyaml-1.19.jar mapper-extra-1.1.0.jar springfox-swagger2-2.8.0.ja
+ r spring-web-5.0.9.RELEASE.jar commons-cli-1.4.jar spring-boot-starte
+ r-2.0.5.RELEASE.jar spring-boot-autoconfigure-2.0.5.RELEASE.jar mappe
+ r-core-1.1.0.jar spring-boot-starter-jdbc-2.0.5.RELEASE.jar httpclien
+ t-4.5.3.jar mapstruct-1.2.0.Final.jar quartz-2.3.0.jar mapper-spring-
+ 1.1.0.jar jackson-datatype-jsr310-2.9.6.jar spring-plugin-core-1.2.0.
+ RELEASE.jar jsqlparser-1.0.jar mapper-base-1.1.0.jar swagger-models-1
+ .5.14.jar spring-boot-starter-data-redis-2.0.5.RELEASE.jar javax.pers
+ istence-api-2.2.jar commons-lang3-3.8.1.jar jackson-datatype-jdk8-2.9
+ .6.jar shiro-spring-1.4.0-RC2.jar springfox-swagger-ui-2.8.0.jar jack
+ son-databind-2.9.6.jar jackson-annotations-2.9.0.jar oshi-core-3.9.1.
+ jar attoparser-2.0.4.RELEASE.jar log4j-to-slf4j-2.10.0.jar commons-fi
+ leupload-1.3.3.jar stax-api-1.0.1.jar mapper-spring-boot-starter-2.1.
+ 0.jar guava-20.0.jar tomcat-embed-core-8.5.34.jar spring-boot-starter
+ -logging-2.0.5.RELEASE.jar reflections-0.9.11.jar druid-spring-boot-s
+ tarter-1.1.10.jar springfox-core-2.8.0.jar swagger-annotations-1.5.14
+ .jar pagehelper-spring-boot-starter-1.2.3.jar jna-platform-4.5.2.jar 
+ byte-buddy-1.7.11.jar spring-boot-starter-aop-2.0.5.RELEASE.jar poi-o
+ oxml-3.17.jar validation-api-2.0.1.Final.jar tomcat-embed-websocket-8
+ .5.34.jar spring-webmvc-5.0.9.RELEASE.jar unbescape-1.1.5.RELEASE.jar
+  httpcore-4.4.10.jar jna-4.5.2.jar classmate-1.3.4.jar spring-jcl-5.0
+ .9.RELEASE.jar kaptcha-2.3.2.jar spring-boot-starter-tomcat-2.0.5.REL
+ EASE.jar antlr4-runtime-4.7.jar mchange-commons-java-0.2.11.jar mssql
+ -jdbc-6.4.0.jre8.jar commons-codec-1.11.jar tomcat-embed-el-8.5.34.ja
+ r log4j-api-2.10.0.jar springfox-schema-2.8.0.jar checkstyle-8.3.jar 
+ spring-boot-2.0.5.RELEASE.jar mybatis-3.4.5.jar xmlbeans-2.6.0.jar sp
+ ring-plugin-metadata-1.2.0.RELEASE.jar filters-2.0.235-1.jar mybatis-
+ spring-boot-starter-1.3.1.jar netty-buffer-4.1.29.Final.jar shiro-cor
+ e-1.3.2.jar shiro-web-1.4.0-RC2.jar Saxon-HE-9.8.0-4.jar pagehelper-s
+ pring-boot-autoconfigure-1.2.3.jar slf4j-api-1.7.25.jar netty-transpo
+ rt-4.1.29.Final.jar netty-handler-4.1.29.Final.jar spring-jdbc-5.0.9.
+ RELEASE.jar javax.servlet-api-3.1.0.jar mapper-weekend-1.1.4.2.jar hi
+ bernate-validator-6.0.12.Final.jar jackson-module-parameter-names-2.9
+ .6.jar mybatis-spring-1.3.1.jar jboss-logging-3.3.2.Final.jar reactor
+ -core-3.1.9.RELEASE.jar spring-boot-starter-json-2.0.5.RELEASE.jar co
+ mmons-io-2.6.jar jul-to-slf4j-1.7.25.jar aspectjweaver-1.8.13.jar spr
+ ing-boot-starter-thymeleaf-2.0.5.RELEASE.jar spring-aop-5.0.9.RELEASE
+ .jar spring-boot-starter-web-2.0.5.RELEASE.jar spring-data-keyvalue-2
+ .0.10.RELEASE.jar lombok-1.16.22.jar HikariCP-2.7.9.jar poi-ooxml-sch
+ emas-3.17.jar spring-data-commons-2.0.10.RELEASE.jar spring-expressio
+ n-5.0.9.RELEASE.jar javax.annotation-api-1.3.2.jar shiro-spring-boot-
+ web-starter-1.4.0-RC2.jar antlr-2.7.7.jar commons-pool2-2.5.0.jar spr
+ ing-data-redis-2.0.10.RELEASE.jar springfox-spi-2.8.0.jar commons-col
+ lections4-4.1.jar javassist-3.22.0-GA.jar netty-codec-4.1.29.Final.ja
+ r pagehelper-5.1.2.jar logback-classic-1.2.3.jar thymeleaf-spring5-3.
+ 0.9.RELEASE.jar mysql-connector-java-5.1.34.jar springfox-spring-web-
+ 2.8.0.jar druid-1.1.10.jar lettuce-core-5.0.4.RELEASE.jar spring-tx-5
+ .0.9.RELEASE.jar spring-oxm-5.0.9.RELEASE.jar spring-context-5.0.9.RE
+ LEASE.jar reactive-streams-1.0.2.jar Excel4J-2.1.4-Final2.jar jackson
+ -core-2.9.6.jar jsoup-1.11.2.jar thymeleaf-extras-java8time-3.0.1.REL
+ EASE.jar commons-beanutils-1.8.3.jar spring-boot-configuration-proces
+ sor-2.0.5.RELEASE.jar thumbnailator-0.4.8.jar curvesapi-1.04.jar mapp
+ er-spring-boot-autoconfigure-2.1.0.jar thymeleaf-3.0.9.RELEASE.jar sh
+ iro-redis-3.2.2.jar netty-common-4.1.29.Final.jar mybatis-spring-boot
+ -autoconfigure-1.3.1.jar springfox-swagger-common-2.8.0.jar gson-2.8.
+ 2.jar jedis-2.9.0.jar poi-3.17.jar spring-core-5.0.9.RELEASE.jar
+Main-Class: com.toher.Application
+

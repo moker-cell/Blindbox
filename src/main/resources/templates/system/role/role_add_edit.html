@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:include="system/include :: header"></head>
+
+<body>
+<form id="inputForm" class="form-horizontal" th:action="@{/system/role/saveRole}" method="post">
+    <input id="roleId" name="roleId" type="hidden" th:value="${role?.roleId}"/>
+    <table class="table table-bordered  table-condensed dataTables-example dataTable no-footer">
+        <tbody>
+        <tr>
+            <td  class="width20 active"><label class="pull-right"><font color="red">*</font> 角色组:</label></td>
+            <td>
+                <select class="form-control m-b" name="groupRoleId" id="groupRoleId">
+                    <option th:selected="${roleGroup?.groupRoleId eq rg.groupRoleId}" th:each="rg:${roleGroups}" th:value="${rg.groupRoleId}" th:utext="${rg.groupName}" value="1">组别</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="width20 active"><label class="pull-right"><span color="red">*</span> 名称:</label></td>
+            <td><input id="roleName" name="roleName" class="form-control " type="text" th:value="${role?.roleName}" maxlength="200"/></td>
+        </tr>
+        <tr>
+            <td class="width20 active"><label class="pull-right">备注:</label></td>
+            <td><textarea id="remarks" name="remarks" maxlength="200" class="form-control " rows="3">[[${role?.remarks}]]</textarea>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div style="text-align: center">
+        <button class="btn btn-primary" type="submit">保存内容</button>
+        <button class="btn btn-white" type="reset">重置</button>
+    </div>
+</form>
+<script type="text/javascript">
+    $("#inputForm").validate({
+        rules: {
+            roleName: "required"
+        },
+        submitHandler: function (form) {
+            $(form).ajaxSubmit({
+                dataType: "json",
+                success: function (data) {
+                    var parant_id = $("#groupRoleId").val();
+                    if (data.code == "success") {
+                        layer.msg(data.message, {icon: 1, time: 2000});
+                        var index = top.layer.getFrameIndex(window.name);
+                        setTimeout(function () {
+                            if (parant_id === "") {
+                                refreshActiveIframe();
+                            } else {
+                                //获取当前活动的iframe
+                                var Iframe = top.getActiveIframe();
+                                //console.log(Iframe.contents().find(".folder-list").html()); 可以直接获取iframe的元素
+                                //调用iframe的JS方法
+                                Iframe[0].contentWindow.reloadTable(parant_id);
+                            }
+                            top.layer.close(index);
+                        }, 2000);
+                    } else {
+                        layer.msg(data.message, {icon: 5, time: 4000});
+                    }
+                }
+            });
+        }
+    });
+</script>
+</body>
+
+</html>

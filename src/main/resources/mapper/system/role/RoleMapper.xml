@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.toher.project.system.role.mapper.RoleMapper">
+    <resultMap id="BaseResultMap" type="Role" >
+        <id column="role_id" property="roleId" jdbcType="NVARCHAR" />
+        <result column="role_name" property="roleName" jdbcType="NVARCHAR" />
+        <result column="remarks" property="remarks" jdbcType="NVARCHAR" />
+    </resultMap>
+
+    <!-- 一对多查询关联查询角色下的所有权限  -->
+    <resultMap id="RoleResultMap" type="Role" extends="BaseResultMap">
+        <collection property="rolePermissions" column="role_id" ofType="RolePermission">
+            <id column="permission_id" property="permissionId" jdbcType="INTEGER" />
+            <result column="role_id" property="roleId" jdbcType="NVARCHAR" />
+            <result column="menu_id" property="menuId" jdbcType="NVARCHAR" />
+            <!-- 级联查询出对应的权限编码以及名称 -->
+            <association property="menu" column="menu_id" javaType="Menu">
+                <id property="menuId" column="menu_id" />
+                <result property="permissionCode" column="permission_code" />
+                <result property="menuName" column="menu_name" />
+                <result property="menuUrl" column="menu_url" />
+            </association>
+        </collection>
+    </resultMap>
+
+    <!-- 查找角色信息以及权限的集合 -->
+    <select id="getRoleAndPermission" resultMap="RoleResultMap" parameterType="java.lang.String" >
+        select * from th_sys_role as r
+        left join th_sys_role_permission as p on(r.role_id = p.role_id)
+        left join th_sys_menu as m on(p.menu_id = m.menu_id) where r.role_id = #{roleId}
+    </select>
+
+    <!-- 用户一对多子查询角色集合 -->
+    <select id="selectRolesByUser" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        role.role_name, role.role_id
+        from th_sys_user_role as user_role
+        inner join th_sys_role as role on (user_role.role_id = role.role_id)
+		where user_role.user_id = #{userId}
+    </select>
+</mapper>

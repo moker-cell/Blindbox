@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+    <head th:include="system/include :: header"></head>
+
+    <script type="text/javascript" th:inline="javascript">
+        var setting = {
+            view: {
+                selectedMulti: false
+            },
+            check: {
+                enable: false,
+                half: true,
+                chkboxType: {"Y": "s", "N": "ps"},
+                nocheckInherit: true
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            }
+        };
+
+        /*<![CDATA[*/
+        var zNodes = [[${jsonData}]];
+        /*]]>*/
+        var ztree;
+
+        $(document).ready(function () {
+            ztree = $.fn.zTree.init($("#tree"), setting, $.parseJSON(zNodes));
+            ztree.expandAll(true);
+        });
+
+        // 默认选择节点
+        function selectCheckNode() {
+            var ids = "".split(",");
+            for (var i = 0; i < ids.length; i++) {
+                var node = ztree.getNodeByParam("id", (ztree == 3 ? "u_" : "") + ids[i]);
+                if ("" == "true") {
+                    try {
+                        ztree.checkNode(node, true, true);
+                    } catch (e) {
+                    }
+                    ztree.selectNode(node, false);
+                } else {
+                    ztree.selectNode(node, true);
+                }
+            }
+        }
+    </script>
+    <body class="gray-bg">
+        <div id="tree" class="ztree" style="padding:15px 20px;"></div>
+    </body>
+
+</html>

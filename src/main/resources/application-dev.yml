@@ -1,0 +1,62 @@
+server:
+  port: 8080
+
+spring:
+#  profiles:
+#    active:
+  #redis配置
+  redis:
+    host: 192.168.1.110
+    port: 6379
+    password: 
+    lettuce:
+      pool:
+        max-active: 8
+        min-idle: 0
+        max-idle: 8
+        max-wait: -1ms
+    database: 0
+    timeout: 10000ms
+  #thymeleaf配置
+  thymeleaf:
+    encoding: utf-8
+    cache: false
+    mode: HTML
+  #druid单数源配置
+  datasource:
+    url: jdbc:mysql://192.168.1.110:3306/manghe?characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+    druid:
+      initial-size: 5
+      max-active: 20
+      max-wait: 4000
+
+#mybatis配置配置
+mybatis:
+  type-aliases-package: com.toher.project
+  mapper-locations: classpath:mapper/**/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+mapper:
+  mappers:
+    - com.toher.framework.mapper.MyMapper
+  notEmpty: true
+
+pagehelper:
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+#自定义配置
+toher:
+  system:
+    systemPath: /system
+    sessionUser: session_user
+    sessionVrifycode: vrifyCode
+    defaultAppid: wx799038dec4335b61
+    salt: TOHER
+    uploadPath: C:\javawork\upload\catering_system\ # C:\javawork\upload\catering_system\ E:\toher-spring-cloud\upload\
+    whiteList:
+      - http://localhost:8080

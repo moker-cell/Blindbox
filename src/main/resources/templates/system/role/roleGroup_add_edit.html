@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:include="system/include :: header"></head>
+
+<body>
+<form id="inputForm" class="form-horizontal" th:action="@{/system/role/saveGroup}" method="post">
+    <input id="groupRoleId" name="groupRoleId" type="hidden" th:value="${roleGroup?.groupRoleId}"/>
+    <table class="table table-bordered  table-condensed dataTables-example dataTable no-footer">
+        <tbody>
+        <tr>
+            <td class="width20 active"><label class="pull-right"><span color="red">*</span> 名称:</label></td>
+            <td><input id="groupName" name="groupName" class="form-control " type="text" th:value="${roleGroup?.groupName}" maxlength="200"/></td>
+        </tr>
+        <tr>
+            <td class="width20 active"><label class="pull-right">备注:</label></td>
+            <td><textarea id="remarks" name="remarks" maxlength="200" class="form-control " rows="3">[[${roleGroup?.remarks}]]</textarea>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div style="text-align: center">
+        <button class="btn btn-primary" type="submit">保存内容</button>
+        <button class="btn btn-white" type="reset">重置</button>
+    </div>
+</form>
+<script type="text/javascript">
+    $("#inputForm").validate({
+        rules: {
+            role_name: "required"
+        },
+        submitHandler: function (form) {
+            $(form).ajaxSubmit({
+                dataType: "json",
+                success: function (data) {
+                    var parant_id = $("#groupRoleId").val();
+                    if (data.code == "success") {
+                        layer.msg(data.message, {icon: 1, time: 2000});
+                        setTimeout(function () {
+                            var index = top.layer.getFrameIndex(window.name);
+                            refreshActiveIframe();
+                            top.layer.close(index);
+                        }, 2000);
+                    } else {
+                        layer.msg(data.message, {icon: 5, time: 4000});
+                    }
+                }
+            });
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:include="system/include :: header"></head>
+
+<body>
+<div class="ibox-content">
+<form id="inputForm" class="form-horizontal" th:action="@{/system/user/saveRole}" method="post">
+    <input id="userId" name="userId" type="hidden" th:value="${user.userId}"/>
+    <div class="form-group">
+        <label class="font-noraml">分配角色</label>
+        <div class="input-group">
+            <select data-placeholder="选择角色" class="chosen-select" name="rolesIds" multiple style="width:450px;"
+                    tabindex="4">
+                <option value="">请选择角色</option>
+                <optgroup th:label="${group.groupName}" th:each="group:${roleGroups}">
+                    <option th:value="${role.roleId}" hassubinfo="true" th:each="role:${group.roles}"
+                            th:selected="${#lists.contains(roleIds, role.roleId)}">[[${role.roleName}]]
+                    </option>
+                </optgroup>
+            </select>
+        </div>
+    </div>
+    <div style="text-align: center">
+        <button class="btn btn-primary" type="submit">保存内容</button>
+    </div>
+</form>
+</div>
+<script type="text/javascript">
+    $("#inputForm").validate({
+        //chosen-select元素执行后会把select隐藏而Validate默认忽略对隐藏元素进行校验，因此我们要把select排除
+        ignore: ":hidden:not(select)",
+        rules: {
+            rolesIds: "required"
+        },
+        submitHandler: function (form) {
+            $(form).ajaxSubmit({
+                dataType: "json",
+                success: function (data) {
+                    if (data.code == "success") {
+                        layer.msg(data.message, {icon: 1, time: 2000});
+                        setTimeout(function () {
+                            var index = top.layer.getFrameIndex(window.name);
+                            var Iframe = top.getActiveIframe();
+                            Iframe[0].contentWindow.toherDataTable.getDataTable().ajax.reload();
+                            top.layer.close(index);
+                        }, 2000);
+                    } else {
+                        layer.msg(data.message, {icon: 5, time: 4000});
+                    }
+                }
+            });
+        }
+    })
+    ;
+</script>
+</body>
+</html>

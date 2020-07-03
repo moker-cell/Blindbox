@@ -1,0 +1,65 @@
+server:
+  port: 8093
+
+spring:
+  #  profiles:
+  #    active:
+  #redis配置
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+    lettuce:
+      pool:
+        max-active: 8
+        min-idle: 0
+        max-idle: 8
+        max-wait: -1ms
+    database: 2
+    timeout: 10000ms
+  #thymeleaf配置
+  thymeleaf:
+    encoding: utf-8
+    cache: false
+    mode: HTML
+  #druid单数源配置
+  datasource:
+    url: jdbc:mysql://10.104.240.195:3306/defa_catering?characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: sbkj@8795555
+    druid:
+      initial-size: 5
+      max-active: 20
+      max-wait: 4000
+
+#mybatis配置配置
+mybatis:
+  type-aliases-package: com.toher.project
+  mapper-locations: classpath:mapper/**/*.xml
+
+mapper:
+  mappers:
+    - com.toher.framework.mapper.MyMapper
+  notEmpty: true
+
+pagehelper:
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+#自定义配置
+toher:
+  system:
+    systemPath: /system
+    sessionUser: session_user
+    sessionVrifycode: vrifyCode
+    defaultAppid: wx799038dec4335b61
+    salt: TOHER
+    uploadPath: E:\toher-spring-cloud\upload\defa\ # C:\javawork\upload\catering_system\ E:\toher-spring-cloud\upload\
+    templateId:
+      - MMl2kjXfbvqGnPkO5giVWiYymr1IZdvtumPNj9ggogU #预约成功消息通知
+      - 8_MZBd1mOEw9jhvzL0n8F4z1E1rjcwhP_Ko-bIndsbc #退订成功消息通知
+    whiteList:
+      - http://localhost:8080
+      - http://sbkj-hmj.nat100.top
+      - http://sbcjm.natapp1.cc

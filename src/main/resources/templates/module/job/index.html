@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:include="system/include :: header"></head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="pull-left">
+                <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" onclick="openLayer('新增任务', ctx + 'system/job/add', '800px', '500px');" title="添加"><i class="fa fa-plus"></i> 添加</button>
+                <button class="btn btn-white btn-sm " data-toggle="tooltip" data-placement="left" onclick="refreshActiveIframe()" title="刷新"><i class="glyphicon glyphicon-repeat"></i> 刷新</button>
+            </div>
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <table class="table table-striped table-bordered table-hover" id="editable">
+                        <thead>
+                        <tr>
+                            <th width="3%">编号</th>
+                            <th width="8%">任务名称</th>
+                            <th width="12%">任务组名</th>
+                            <th width="8%">方法名称</th>
+                            <th width="8%">方法参数</th>
+                            <th width="10%">表达式</th>
+                            <th>规则说明</th>
+                            <th width="5%">任务状态</th>
+                            <th width="10%">创建时间</th>
+                            <th width="15%">备注</th>
+                            <th width="10%">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    var editor;
+    var toherDataTable = $("#editable").ToherDataTables({
+        "dom": "lrp",
+        "getDataUrl": ctx + "system/job/dataJson",
+        "columns": ["jobId", "jobName", "jobGroup", "methodName", "methodParams", "cronExpression", "timeExplain", "status","createTime","remark",null],
+        "columnDefs": [
+            {
+                "defaultContent": "",
+                "targets": "_all"
+            },
+            {"targets": 7, "render": function (data, type, row, meta) {
+                    if (row.status === true) {
+                        return "<button type='button' class='btn btn-primary btn-xs' onclick=\"updateStatus(ctx +'system/job/updateProperty?jobId=" + row.jobId + "&status=0','0');\"><i class='fa fa-refresh'></i> 运行</button>";
+                    } else {
+                        return "<button type='button' class='btn btn-danger btn-xs' onclick=\"updateStatus(ctx +'system/job/updateProperty?jobId=" + row.jobId + "&status=1','1');\"><i class='fa fa-refresh'></i> 停止</button>";
+                    }
+                }
+            },
+            {"targets": 10, "render": function (data, type, row, meta) {
+                    var html = "";
+                    html = html + "<a onclick=\"openLayer('编辑任务', ctx +'system/job/edit/" + row.jobId + "', '800px', '500px');\" class='btn btn-success btn-xs' ><i class='fa fa-edit'></i> 编辑</a> ";
+                    html = html + "<button type='button' onclick=\"deleteTimer('"+row.jobId+"')\" class='btn btn-danger btn-xs' ><i class='fa fa-trash'></i> 删除</button>";
+                    return html;
+                }
+            }
+        ],
+        "iCheck": true
+    });
+
+    //获取原始的DataTable对象
+    var dataTable = toherDataTable.getDataTable();
+    //切换任务状态
+    function updateStatus(url, status) {
+        var title = "是否运行任务？";
+        if (status == "0") {
+            title = "是否停止任务？";
+        }
+        confirmLayerReloadTable(title, url, dataTable);
+    }
+
+    //删除单条任务信息
+    function deleteTimer(timer_id) {
+        confirmLayerReloadTable('要删除该任务么？)', ctx +'system/job/delete/' + timer_id, dataTable);
+    }
+
+</script>
+</body>
+</html>

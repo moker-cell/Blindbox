@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:include="system/include :: header"></head>
+<style>
+    .middle-box {
+        max-width:none;
+        z-index: 100;
+        margin: 0 auto;
+        padding-top: 40px;
+    }
+    .middle-box h1 {
+        font-size: 100px;
+    }
+</style>
+<body class="gray-bg">
+<div class="middle-box text-center animated fadeInDown">
+    <div style="text-align: center"><img th:src="@{/img/500.png}" /></div>
+    <h1>[[${title}]]</h1>
+    <h3 class="font-bold">[[${code}]]</h3>
+    <div class="error-desc">
+        <div>[[${message}]]</div>
+    </div>
+</div>
+
+</body>
+</html>

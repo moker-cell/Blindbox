@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:include="system/include :: header"></head>
+<style>
+    .layer-date{
+        max-width:120px;
+    }
+</style>
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg">
+    <div class="ibox-content">
+        <form role="form" class="form-inline" id="searchForm">
+            <div class="form-group">
+                <label for="startTime">操作时间：</label>
+                <input class="form-control layer-date" name="startTime" id="startTime" value="" type="text"
+                       readonly="readonly" placeholder="开始日期"/> -
+                <input class="form-control layer-date" name="endTime" id="endTime" value="" type="text"
+                       readonly="readonly" placeholder="结束日期"/>
+                <script type="text/javascript">
+                    //layer 日期控件
+                    laydate.render({
+                        elem: '#startTime' //指定元素
+                    });
+                    laydate.render({
+                        elem: '#endTime' //指定元素
+                    });
+                </script>
+            </div>
+            <div class="form-group">
+                <label for="methodName">方法名称：</label>
+                <select name="methodName" class="form-control" id="methodName" th:with="type=${@thymeleafDictService.selectDictData('sys_job_method')}">
+                    <option value="">请选择方法</option>
+                    <option value="true" th:each="e : ${type}" th:value="${e.dictValue}">[[${e.dictLabel}]]</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="methodParams">方法参数：</label>
+                <input type="text" name="methodParams" id="methodParams" placeholder="请输入方法参数" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="remark2">账户：</label>
+                <input type="text" name="remark2" id="remark2" placeholder="请输入账户" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="status">执行状态：</label>
+                <select name="status" class="form-control" id="status" th:with="type=${@thymeleafDictService.selectDictData('sys_job_execute_status')}">
+                    <option value="">请选择状态</option>
+                    <option value="true" th:each="e : ${type}" th:value="${e.dictValue}">[[${e.dictLabel}]]</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" type="button" onclick="queryData()">搜索</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="pull-left">
+                <button class="btn btn-white btn-sm" onclick="deleteAll()" data-toggle="tooltip" data-placement="top"><i class="fa fa-trash-o"> 批量删除</i></button>
+                <button class="btn btn-white btn-sm" onclick="deleteParamAll()" data-toggle="tooltip" data-placement="top"><i class="fa fa-trash-o"> 条件批量删除</i></button>
+                <button class="btn btn-white btn-sm " data-toggle="tooltip" data-placement="left" onclick="refreshActiveIframe()" title="刷新"><i class="glyphicon glyphicon-repeat"></i> 刷新</button>
+            </div>
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <table class="table table-striped table-bordered table-hover" id="editable">
+                        <thead>
+                        <tr>
+                            <th width="3%"><input type="checkbox" class="i-checks" name="input[]"></th>
+                            <th width="10%">创建时间</th>
+                            <th width="8%">任务名称</th>
+                            <th width="8%">任务组名</th>
+                            <th width="8%">方法名称</th>
+                            <th width="5%">方法参数</th>
+                            <th width="5%">执行速率</th>
+                            <th width="5%">任务状态</th>
+                            <th>备注</th>
+                            <th width="10%">账户</th>
+                            <th width="7%">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    var editor;
+    var toherDataTable = $("#editable").ToherDataTables({
+        "dom": "lrp",
+        "getDataUrl": ctx + "system/job/log/dataJson",
+        "columns": ["logId", "createTime", "jobName", "jobGroup", "methodName", "methodParams", "jobMessage", "status","remark","remark2",null],
+        "columnDefs": [
+            {
+                "defaultContent": "",
+                "targets": "_all"
+            },
+            {
+                "targets": 0, "render": function (data, type, row, meta) {
+                    var html = "<input type=\"checkbox\" value=\"" + row.logId + "\" class=\"i-checks\" name=\"logIds\">";
+                    return html;
+                }
+            },
+            {"targets": 7, "render": function (data, type, row, meta) {
+                    if (row.status === true) {
+                        return "<button type='button' class='btn btn-primary btn-xs'><i class='fa fa-refresh'></i> 成功</button>";
+                    } else {
+                        return "<button type='button' class='btn btn-danger btn-xs'><i class='fa fa-refresh'></i> 失败</button>";
+                    }
+                }
+            },
+            {"targets": 10, "render": function (data, type, row, meta) {
+                    var html = "";
+                    html = html + "<a onclick=\"alertError('" + row.exceptionInfo + "');\" class='btn btn-success btn-xs' ><i class='fa fa-edit'></i> 系统错误</a> ";
+                    return html;
+                }
+            }
+        ],
+        "iCheck": true
+    });
+
+    //获取原始的DataTable对象
+    var dataTable = toherDataTable.getDataTable();
+    /*查询数据*/
+    function queryData() {
+        var param = $("#searchForm").serializeJSON();
+        dataTable.settings()[0].ajax.data = param;
+        dataTable.ajax.reload();
+    }
+    //弹出Exception错误信息
+    function alertError(message){
+        if(message!="" && message!="null"){
+            top.layer.alert(message);
+        }
+    }
+    //删除所选
+    function deleteAll() {
+        var checkID = $("#editable tbody tr td input.i-checks").serialize();
+        if (checkID == "") {
+            top.layer.alert('请至少选择一条数据!', {icon: 0, title: '警告'});
+            return;
+        }
+        commonDeleteAllReloadTable(ctx + "system/job/log/deleteBatch", checkID, "要删除所选数据么？",dataTable);
+    }
+    //条件批量删除
+    function deleteParamAll(){
+        var params = $("#searchForm").serialize();
+        if (params == "") {
+            top.layer.alert('请至少选择一条数据!', {icon: 0, title: '警告'});
+            return;
+        }
+        commonDeleteAllReloadTable(ctx + "system/job/log/deleteBatchParam", params, "要删除所选数据么？",dataTable);
+    }
+
+</script>
+</body>
+</html>

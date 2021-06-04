@@ -24,7 +24,7 @@
         <java.version>1.8</java.version>
         <druid.version>1.1.10</druid.version>
         <jsoup.version>1.11.2</jsoup.version>
-        <httpclient.version>4.5.3</httpclient.version>
+        <httpclient.version>4.5.13</httpclient.version>
         <lettuce.version>5.0.4.RELEASE</lettuce.version>
         <shiro-redis.version>3.2.2</shiro-redis.version>
         <oshi.version>3.9.1</oshi.version>
